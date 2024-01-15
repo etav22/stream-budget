@@ -1,42 +1,40 @@
 import streamlit as st
 import pandas as pd
+from stream_budget.components.filters import Filters
 
 st.set_page_config(layout="wide")
 st.title("Stream-Budget")
 
-# Get data and convert the date column to datetime objects
+# Get data and apply preprocessing
 df = pd.read_csv("data/transactions.csv", index_col=False).reset_index(drop=True)
 df = df.drop(columns=["Check or Slip #"])
-df["Posting Date"] = pd.to_datetime(df["Posting Date"], format="%m/%d/%Y").dt.date
+df.columns = df.columns.str.lower()
+df.columns = df.columns.str.replace(" ", "_")
+df["posting_date"] = pd.to_datetime(df["posting_date"], format="%m/%d/%Y").dt.date
+
+
 st.markdown("## Transactions")
 
 with st.sidebar:
     st.markdown("## Filters")
-    min_max_date = [df["Posting Date"].min(), df["Posting Date"].max()]
-    min_max_amount = [df["Amount"].min(), df["Amount"].max()]
-    date_range = st.date_input(
-        "Start date",
-        value=min_max_date,
-        min_value=min_max_date[0],
-        max_value=min_max_date[1],
-    )
-    amount = st.slider(
-        "Transaction Amount",
-        min_value=df["Amount"].min(),
-        max_value=df["Amount"].max(),
-        value=min_max_amount,
-    )
-    description = st.selectbox("Description", df["Description"].unique())
-    card = st.selectbox("Card", df["Details"].unique())
-    transax_type = st.selectbox("Transaction Type", df["Type"].unique())
+    filter = Filters(dataframe=df)
+
+    date_range = filter.date_filter("Date Range", col="posting_date")
+    amount = filter.amount_filter("Amount Range", col="amount")
+    description = filter.description_filter("Description", col="description")
+    card = filter.card_filter("Card", col="details")
+    transax_type = filter.type_filter("Type", col="type")
+
     btn = st.button("Filter", use_container_width=True)
 
 if btn:
     # Filter the dataframe based on the user's selections
-    df = df[df["Type"] == transax_type]
-    df = df[df["Details"] == card]
-    df = df[df["Posting Date"].between(date_range[0], date_range[1])]
-    df = df[df["Amount"].between(amount[0], amount[1])]
+    df = df[
+        (df["type"] == transax_type)
+        & (df["details"] == card)
+        & (df["posting_date"].between(date_range[0], date_range[1]))
+        & (df["amount"].between(amount[0], amount[1]))
+    ]
 
     st.dataframe(df)
 else:
@@ -44,4 +42,4 @@ else:
 
 # Create a plotly line chart of balance over time
 st.markdown("## Balance over time")
-st.line_chart(data=df, x="Posting Date", y="Balance")
+st.line_chart(data=df, x="posting_date", y="balance")
