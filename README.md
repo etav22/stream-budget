@@ -15,6 +15,8 @@ To run the project locally, you will need to have the following installed on you
 - [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - [docker](https://docs.docker.com/get-docker/)
 
+Additionally, you will need a `transactions.csv` file in a `data` folder which is git ignored. This file should contain all your transactions. You can export this file from your bank's website. In the future, I would like to use a financial API to get this data instead of a CSV file (see [Roadmap](#roadmap)).
+
 ### Installation
 
 To install the project, run the following commands:
@@ -50,3 +52,5 @@ just docker
 - [ ] Add monthly income chart
 - [ ] Modularize code within `stream_budget` directory
 - [ ] Use financial API over CSV files
+- [ ] Create some sort of time-series prediction model to predict future spending
+- [ ] Add database to store categorized transactions
