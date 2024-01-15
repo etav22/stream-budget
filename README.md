@@ -11,7 +11,6 @@ To get a local copy up and running follow these simple example steps.
 
 To run the project locally, you will need to have the following installed on your machine:
 
-- [just](https://github.com/casey/just)
 - [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - [docker](https://docs.docker.com/get-docker/)
 
@@ -22,7 +21,7 @@ Additionally, you will need a `transactions.csv` file in a `data` folder which i
 To install the project, run the following commands:
 
 ```sh
-just install
+make install
 ```
 
 This will install all the dependencies and the `pre-commit` hooks.
@@ -35,13 +34,13 @@ To run the project, you have two options:
 1. Run the project with poetry:
 
 ```sh
-just run
+make run
 ```
 
 2. Run the project with docker:
 
 ```sh
-just docker
+make docker
 ```
 
 <!-- ROADMAP -->
