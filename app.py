@@ -6,7 +6,7 @@ st.set_page_config(layout="wide")
 st.title("Stream-Budget")
 
 # Get data and convert the date column to datetime objects
-df = pd.read_csv("data/chase_activity.csv", index_col=False)
+df = pd.read_csv("data/transactions.csv", index_col=False)
 df["Posting Date"] = pd.to_datetime(df["Posting Date"], format="%m/%d/%Y").dt.date
 st.markdown("## Transactions")
 
