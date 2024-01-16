@@ -46,10 +46,11 @@ make docker
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Clean up filters
+- [ x ] Clean up filters
+- [ ] Add new metrics for overview page
 - [ ] Add monthly spending chart
 - [ ] Add monthly income chart
 - [ ] Modularize code within `stream_budget` directory
-- [ ] Use financial API over CSV files
+- [ x ] Use financial API over CSV files - *cannot be done : /*
 - [ ] Create some sort of time-series prediction model to predict future spending
 - [ ] Add database to store categorized transactions

@@ -8,7 +8,7 @@ class Filters:
     def __init__(self, dataframe: pd.DataFrame):
         self.df = dataframe
 
-    def date_filter(self, title: str, col: str):
+    def date_filter(self, title: str, col: str) -> list:
         min_max_date = [self.df[col].min(), self.df[col].max()]
         date_range = st.date_input(
             title,
@@ -18,7 +18,7 @@ class Filters:
         )
         return date_range
 
-    def amount_filter(self, title: str, col: str):
+    def amount_filter(self, title: str, col: str) -> list:
         min_max_amount = [self.df[col].min(), self.df[col].max()]
         amount = st.slider(
             title,
@@ -28,17 +28,17 @@ class Filters:
         )
         return amount
 
-    def description_filter(self, title: str, col: str):
+    def description_filter(self, title: str, col: str) -> str:
         options = self.df[col].unique()
         description = st.selectbox(title, options)
         return description
 
-    def type_filter(self, title: str, col: str):
+    def type_filter(self, title: str, col: str) -> str:
         options = self.df[col].unique()
         transax_type = st.selectbox(title, options)
         return transax_type
 
-    def card_filter(self, title: str, col: str):
+    def card_filter(self, title: str, col: str) -> str:
         options = self.df[col].unique()
         category = st.selectbox(title, options)
         return category

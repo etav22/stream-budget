@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from stream_budget.components.filters import Filters
+from stream_budget.components.tables import create_inflow_outflow_tables
 
 st.set_page_config(layout="wide")
 st.title("Stream-Budget")
@@ -20,25 +21,28 @@ with st.sidebar:
     filter = Filters(dataframe=df)
 
     date_range = filter.date_filter("Date Range", col="posting_date")
-    amount = filter.amount_filter("Amount Range", col="amount")
-    description = filter.description_filter("Description", col="description")
-    card = filter.card_filter("Card", col="details")
-    transax_type = filter.type_filter("Type", col="type")
+    advanced_filters = st.checkbox("Advanced Filters")
 
-    btn = st.button("Filter", use_container_width=True)
+    if advanced_filters:
+        amount = filter.amount_filter("Amount Range", col="amount")
+        description = filter.description_filter("Description", col="description")
+        card = filter.card_filter("Card", col="details")
+        transax_type = filter.type_filter("Type", col="type")
 
-if btn:
-    # Filter the dataframe based on the user's selections
+        btn = st.button("Filter Transactions", use_container_width=True)
+
+if advanced_filters and btn:
     df = df[
         (df["type"] == transax_type)
         & (df["details"] == card)
         & (df["posting_date"].between(date_range[0], date_range[1]))
         & (df["amount"].between(amount[0], amount[1]))
     ]
-
-    st.dataframe(df)
+    create_inflow_outflow_tables(dataframe=df)
 else:
-    st.dataframe(df)
+    if len(date_range) == 2:
+        df = df[df["posting_date"].between(date_range[0], date_range[1])]
+    create_inflow_outflow_tables(dataframe=df)
 
 # Create a plotly line chart of balance over time
 st.markdown("## Balance over time")
