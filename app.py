@@ -24,20 +24,15 @@ with st.sidebar:
     advanced_filters = st.checkbox("Advanced Filters")
 
     if advanced_filters:
-        amount = filter.amount_filter("Amount Range", col="amount")
-        description = filter.description_filter("Description", col="description")
-        card = filter.card_filter("Card", col="details")
-        transax_type = filter.type_filter("Type", col="type")
+        filter.amount_filter("Amount Range", col="amount")
+        filter.description_filter("Description", col="description")
+        filter.card_filter("Card", col="details")
+        filter.type_filter("Type", col="type")
 
         btn = st.button("Filter Transactions", use_container_width=True)
 
 if advanced_filters and btn:
-    df = df[
-        (df["type"] == transax_type)
-        & (df["details"] == card)
-        & (df["posting_date"].between(date_range[0], date_range[1]))
-        & (df["amount"].between(amount[0], amount[1]))
-    ]
+    df = filter.apply_filters()
     create_inflow_outflow_tables(dataframe=df)
 else:
     if len(date_range) == 2:
